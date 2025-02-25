@@ -1,0 +1,157 @@
+#include<iostream>
+using namespace std;
+/*
+B103040023 劉期正
+september,24,2022
+程式目的:利用C++的class製造出聯集、交集、差集等運算  
+*/ 
+class tset{
+	public:
+		tset();//constructor 
+		tset(string A);
+		bool list[256];//代表那個數字的ascii code有沒有數字，有算1，沒有算0 
+};
+
+tset::tset(){//初始化全部都變成0 
+	int a;
+	for(a=0;a<256;a++){
+		list[a]=0;
+	}
+}
+
+tset::tset(string A){//constructor 
+	int a;//控制運算子
+	for(a=0;a<256;a++){
+		list[a] = 0;
+	} 
+	for(a=0;a<A.length();a++){
+		list[A[a]] = 1;//把A之中所有字元變成1 
+	}
+}
+
+const tset operator+(const tset &A , const tset &B ){
+	int a;//控制運算子
+	tset C; 
+	for(a=0;a<256;a++){
+		if( A.list[a] == 1 || B.list[a] == 1  ){//兩個其中之一有，就算有 
+			C.list[a] = 1;
+		}
+		else{
+			C.list[a] = 0;
+		}
+	}
+	return C;
+}
+const tset operator*(const tset &A , const tset &B ){
+	int a;//控制運算子
+	tset C; 
+	for(a=0;a<256;a++){
+		if( A.list[a] == 1 && B.list[a] == 1  ){//要兩個集合都有才算有 
+			C.list[a] = 1;
+		}
+		else{
+			C.list[a] = 0;
+		}
+	}
+	return C;
+}
+const tset operator-(const tset &A , const tset &B ){// 
+	int a;//控制運算子
+	tset C; 
+	for(a=0;a<256;a++){
+		if( A.list[a] == 1 && B.list[a] == 0  ){//A有B沒有才算有 
+			C.list[a] = 1;
+		}
+		else{
+			C.list[a] = 0;
+		}
+	}
+	return C;
+}
+bool operator>=(const tset &A , const tset &B ){
+	int a;//控制運算子
+	bool include;
+	for(a=0;a<256;a++){
+		if( A.list[a] == 0 && B.list[a] == 1  ){//A沒有B有 
+			return false;
+		}
+	}
+	return true;//若檢查出來都沒有上述情況，return true 
+}
+bool in( char input,const tset &A){
+	if( A.list[input]==1 ){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+ostream& operator <<(ostream& outputStream, const tset A){
+	int a;//計次運算子
+	cout<<"{"; 
+	for(a=0;a<256;a++){
+		if(A.list[a] == 1){
+			char temp = a; 
+			cout<<temp;
+		}
+	}
+	cout<<"}"<<endl; 
+}
+int main(void){
+	int time;//計算做的次數
+	int a;//
+	cin>>time;
+	for(a=0;a<time;a++){
+		cin.ignore();
+		string input1,input2;
+		char input_character;
+		getline(cin,input1);
+		getline(cin,input2);
+		tset A(input1);
+		tset B(input2);
+		cin>>input_character;
+		cout<<A;
+		cout<<B;
+		cout<<"A+B:"<<A+B;
+		cout<<"A*B:"<<A*B;
+		cout<<"A-B"<<A-B;
+		cout<<"B-A"<<B-A;
+		if(A>=B){
+			cout<<"A contain B"<<endl;
+		}
+		else{
+			cout<<"A does not contain B"<<endl;
+		}
+		if(B>=A){
+			cout<<"B contain A"<<endl;
+		}
+		else{
+			cout<<"B does not contain A"<<endl;
+		}
+		if(in(input_character,A)){
+			cout<<input_character<<" is in A\n";
+		}
+		else{
+			cout<<input_character<<" is not in A\n";
+		}
+	
+		if(in(input_character,B)){
+			cout<<input_character<<" is in B\n";
+		}
+		else{
+			cout<<input_character<<" is not in B\n";
+		}
+		
+	}
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
